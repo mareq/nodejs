@@ -1,0 +1,25 @@
+{
+  "data_dir": ["var", "data"],
+  "articles_cnt": 65536,
+
+  "seed": "42",
+  "language_size": 4194304,
+  "keywords_size": 4096,
+
+  "keywords_min": 4,
+  "keywords_max": 16,
+  "keyword_minlength": 5,
+  "titlewords_min": 4,
+  "titlewords_max": 8,
+  "titlekeyword_probability": 50,
+  "sentencewords_min": 2,
+  "sentencewords_max": 16,
+  "sentencekeyword_probability": 1,
+  "paragraphsentences_min": 8,
+  "paragraphsentences_max": 64,
+  "articleparagraphs_min": 4,
+  "articleparagraphs_max": 32
+
+}
+
+
