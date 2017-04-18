@@ -1,0 +1,5 @@
+{
+  "tmp_dir": ["tmp"],
+  "upload_dir": ["var", "uploads"],
+  "mongo_db_uri": "mongodb://localhost:27017/ingress"
+}
