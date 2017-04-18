@@ -1,0 +1,23 @@
+{
+  "name": "foo",
+  "version": "0.0.1",
+  "description": "Test package.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "foo",
+    "bar",
+    "baz",
+    "qux",
+    "corge",
+    "grault"
+  ],
+  "author": "me ;)",
+  "license": "ISC"
+}

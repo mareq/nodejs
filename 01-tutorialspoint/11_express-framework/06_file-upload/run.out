@@ -1,0 +1,68 @@
+Starting server: PID: 4460
+Example app listening at http://0.0.0.0:8081
+Request:
+GET /index.htm
+Response:
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Accept-Ranges: bytes
+Cache-Control: public, max-age=0
+Last-Modified: Sun, 12 Mar 2017 23:04:16 GMT
+ETag: W/"1b0-15ac4c3e180"
+Content-Type: text/html; charset=UTF-8
+Content-Length: 432
+Date: Mon, 13 Mar 2017 00:11:04 GMT
+Connection: close
+
+<html>
+   <head>
+      <title>File Uploading Form</title>
+   </head>
+
+   <body>
+      <h3>File Upload:</h3>
+      Select a file to upload: <br />
+      <form
+        action="http://127.0.0.1:8081/file_upload"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+         <input type="file" name="file" size="50" />
+         <br />
+         <input type="submit" value="Upload File" />
+      </form>
+   </body>
+</html>
+Request:
+POST /file_upload
+Content-Type: multipart/form-data; boundary=---------------------------00000000000000000000000000000
+Content-Length: 260
+
+-----------------------------00000000000000000000000000000
+Content-Disposition: form-data; name="file"; filename="lorem.txt"
+Content-Type: text/plain; charset=us-ascii
+
+Lorem ipsum dolor sit amet.
+
+-----------------------------00000000000000000000000000000--
+Response:
+HTTP/1.1 500 Internal Server Error
+X-Powered-By: Express
+Content-Security-Policy: default-src 'self'
+X-Content-Type-Options: nosniff
+Content-Type: text/html; charset=utf-8
+Content-Length: 396
+Date: Mon, 13 Mar 2017 00:11:04 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Error: Unexpected end of multipart data<br> &nbsp; &nbsp;at /home/mareq/work/projects/nodejs/repo/nodejs/11_express-framework/06_file-upload/node_modules/multer/node_modules/busboy/node_modules/dicer/lib/Dicer.js:62:28<br> &nbsp; &nbsp;at process._tickCallback (node.js:419:13)</pre>
+</body>
+Stopping server... done.
+rm: cannot remove ‘tmp/*’: No such file or directory

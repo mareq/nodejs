@@ -1,0 +1,12 @@
+POST /users
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 131
+
+user={
+   "user4" : {
+      "id": 4,
+      "name" : "mohit",
+      "password" : "password4",
+      "profession" : "teacher"
+   }
+}

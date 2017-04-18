@@ -1,0 +1,12 @@
+POST /file_upload
+Content-Type: multipart/form-data; boundary=---------------------------00000000000000000000000000000
+Content-Length: 259
+
+-----------------------------00000000000000000000000000000
+Content-Disposition: form-data; name="file"; filename="lorem.txt"
+Content-Type: text/plain; charset=us-ascii
+
+TODO: This does *NOT* work!
+
+-----------------------------00000000000000000000000000000--
+
