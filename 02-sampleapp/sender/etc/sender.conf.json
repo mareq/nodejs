@@ -1,0 +1,5 @@
+{
+  "data_source": "Lorien",
+  "data_dir": ["usr", "data"],
+  "sink_url": "http://127.0.0.1:8082/data"
+}
