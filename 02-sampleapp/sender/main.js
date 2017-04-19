@@ -4,6 +4,7 @@
 
 
 var request = require('request');
+var file = require('file');
 var fs = require('fs');
 var path = require('path');
 
@@ -22,34 +23,34 @@ config['data_dir'].forEach(function(dir) {
 });
 
 
-console.log("sending data from directory: " + DATA_DIR);
-fs.readdir(
+console.log('sending data from root directory: ' + DATA_DIR);
+file.walk(
   DATA_DIR,
-  function(err, files) {
+  function(err, dir_path, dirs, files) {
     if(err) {
       return console.error(err);
     }
-    sendFiles(files);
+    sendFiles(dir_path, files);
   }
 );
 
-function sendFiles(files)
+function sendFiles(dir_path, files)
 {
   files
     .filter(function(file) {
       return file.substr(-5) === '.meta';
     })
     .forEach(function(file) {
-      var basename = file.slice(0, -5);
-      sendFile(basename);
+      var name = path.basename(file.slice(0, -5));
+      sendFile(dir_path, name);
     })
   ;
 }
 
-function sendFile(name)
+function sendFile(dir_path, name)
 {
   var metadata = fs.readFile(
-    path.join(DATA_DIR, name + '.meta'),
+    path.join(dir_path, name + '.meta'),
     function(err, raw_meta) {
       if(err) {
         return console.error(err);
@@ -57,7 +58,7 @@ function sendFile(name)
       sendData(
         name,
         JSON.parse(raw_meta), 
-        fs.createReadStream(path.join(DATA_DIR, name + '.data'))
+        fs.createReadStream(path.join(dir_path, name + '.data'))
       );
     }
   );
