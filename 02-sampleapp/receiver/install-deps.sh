@@ -1,5 +1,6 @@
 #!/bin/sh
 
+npm install co --save
 npm install async --save
 
 npm install express --save
