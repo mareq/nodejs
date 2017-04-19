@@ -7,3 +7,6 @@ npm install multer --save
 npm install mongodb --save
 
 
+# vim: set ts=2 sw=2 et:
+
+

@@ -152,4 +152,6 @@ for(var article_no = 0; article_no < config['articles_cnt']; article_no++) {
 }
 
 
+// vim: set ts=2 sw=2 et:
+
 
