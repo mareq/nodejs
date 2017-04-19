@@ -5,7 +5,9 @@
 
 var path = require('path');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 var zlib = require('zlib');
+var xxh = require('xxhashjs');
 var async = require('async');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -17,8 +19,9 @@ var mongoClient = require('mongodb').MongoClient,
 var mongoObjectId = require('mongodb').ObjectID;
 
 
-VERSION = '0.1'
+VERSION = '0.1';
 CONFIG_FILE = path.join(__dirname, 'etc', 'receiver.conf.json');
+XXH_SEED = 0xACDC;
 
 
 var config = JSON.parse(
@@ -80,11 +83,20 @@ function httpRqtIndex(http_req, http_res) {
 
 function httpRqtDataUpload(http_req, http_res) {
   var data_target_file_name = http_req.file.originalname + '.gz';
+  var data_target_file_hash = xxh.h32(data_target_file_name, XXH_SEED).toString(16);
+  var data_target_file_dir = "";
+  for(i = 0; i < 4 && i < data_target_file_hash.length; i++) {
+    data_target_file_dir = path.join(
+      data_target_file_dir,
+      data_target_file_hash.charAt(i)
+    );
+  }
   async.parallel(
     {
       store_data: function(callback) {
         storeData(
           http_req.file.path,
+          data_target_file_dir,
           data_target_file_name,
           callback
         );
@@ -94,6 +106,7 @@ function httpRqtDataUpload(http_req, http_res) {
         // in the real world...
         storeMetaData(
           JSON.parse(http_req.body.meta),
+          data_target_file_dir,
           data_target_file_name,
           callback
         )
@@ -113,9 +126,18 @@ function httpRqtDataUpload(http_req, http_res) {
   );
 }
 
-function storeData(data_source_path, data_target_file_name, callback) {
-  var data_target_path = path.join(UPLOAD_DIR, data_target_file_name);
-  var sink = fs.createWriteStream(data_target_path);
+function storeData(
+  data_source_path,
+  data_target_file_dir,
+  data_target_file_name,
+  callback
+) {
+  var data_target_path = path.join(UPLOAD_DIR, data_target_file_dir);
+  mkdirp.sync(data_target_path);
+  var sink = fs.createWriteStream(path.join(
+    data_target_path,
+    data_target_file_name
+  ));
   fs.createReadStream(data_source_path)
     .pipe(zlib.createGzip())
     .pipe(sink)
@@ -133,14 +155,20 @@ function storeData(data_source_path, data_target_file_name, callback) {
   );
 }
 
-function storeMetaData(meta, data_target_file_name, callback) {
+function storeMetaData(
+  meta,
+  data_target_file_dir,
+  data_target_file_name,
+  callback
+) {
   mongoClient.connect(
     config['mongo_db_uri'],
     function(err, db) {
       if(err) {
         callback(err, null);
       }
-      meta['data'] = data_target_file_name;
+      meta['data_dir'] = data_target_file_dir;
+      meta['data_file'] = data_target_file_name;
       db.collection('documents').insertOne(
         meta,
         function(err, db_res) {

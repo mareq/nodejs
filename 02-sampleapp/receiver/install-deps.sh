@@ -3,6 +3,8 @@
 npm install co --save
 npm install async --save
 
+npm install fs-extra --save
+npm install xxhashjs --save
 npm install express --save
 npm install body-parser --save
 npm install multer --save
