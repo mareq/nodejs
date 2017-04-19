@@ -1,5 +1,7 @@
 #!/bin/sh
 
+npm install async --save
+
 npm install express --save
 npm install body-parser --save
 npm install multer --save
