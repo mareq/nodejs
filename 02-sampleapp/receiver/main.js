@@ -167,10 +167,13 @@ function storeMetaData(
       if(err) {
         callback(err, null);
       }
-      meta['data_dir'] = data_target_file_dir;
-      meta['data_file'] = data_target_file_name;
       db.collection('documents').insertOne(
-        meta,
+        {
+          state: 'ready',
+          data_dir: data_target_file_dir,
+          data_file: data_target_file_name,
+          metadata: meta
+        },
         function(err, db_res) {
           db.close();
           if(err) {

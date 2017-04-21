@@ -1,0 +1,5 @@
+{
+  "data_dir": ["var", "data"],
+  "listen_addr": "tcp://*:8888",
+  "mongo_db_uri": "mongodb://localhost:27017/ingress"
+}
