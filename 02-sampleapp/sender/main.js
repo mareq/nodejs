@@ -4,7 +4,7 @@
 
 
 var request = require('request');
-var file = require('file');
+var walk = require('walk');
 var fs = require('fs');
 var path = require('path');
 
@@ -24,13 +24,19 @@ config['data_dir'].forEach(function(dir) {
 
 
 console.log('sending data from root directory: ' + DATA_DIR);
-file.walk(
-  DATA_DIR,
-  function(err, dir_path, dirs, files) {
-    if(err) {
-      return console.error(err);
-    }
-    sendFiles(dir_path, files);
+var walker = walk.walk(DATA_DIR)
+walker.on(
+  'files',
+  function(dir_path, files, next) {
+    sendFiles(dir_path, files.map(function(stats) { return stats.name; }));
+    next();
+  }
+);
+walker.on(
+  'errors',
+  function(dir_path, node_stats, next) {
+    console.error('file walker:', node_stats);
+    next();
   }
 );
 
