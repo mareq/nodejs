@@ -55,7 +55,7 @@ function sendFiles(dir_path, files)
 
 function sendFile(dir_path, name)
 {
-  var metadata = fs.readFile(
+  fs.readFile(
     path.join(dir_path, name + '.meta'),
     function(err, raw_meta) {
       if(err) {
