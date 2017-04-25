@@ -1,0 +1,5 @@
+{
+  "raw_storage_address": "tcp://localhost:8888",
+  "raw_storage_max_errors": 8,
+  "raw_storage_rqt_queue_size": 256
+}
