@@ -1,7 +1,7 @@
 #!/bin/sh
 
 npm install walk --save
-npm install express --save
+npm install request --save
 npm install body-parser --save
 npm install multer --save
 
