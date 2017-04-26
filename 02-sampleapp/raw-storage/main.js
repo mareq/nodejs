@@ -76,6 +76,7 @@ function dispatchRequest(rqt, callback) {
 
   if(!('uri' in rqt_json)) {
     ret['res'] = {
+      rqt_id: rqt_json['rqt_id'],
       status: 'error',
       data: 'Missing URI'
     };
@@ -85,6 +86,7 @@ function dispatchRequest(rqt, callback) {
   var route = getRoute(routing_table, rqt_json['uri']);
   if(route['status'] != 'ok') {
     ret['res'] = {
+      rqt_id: rqt_json['rqt_id'],
       status: 'error',
       data: route['data'] + ': ' + rqt_json['uri']
     };
@@ -94,6 +96,7 @@ function dispatchRequest(rqt, callback) {
     rqt_json,
     route['data']['vars'],
     function(res) {
+      res['rqt_id'] = rqt_json['rqt_id'];
       ret['res'] = res;
       callback(ret);
     }
@@ -128,7 +131,6 @@ function getRoute(routing_table, uri) {
       }
     }
     else {
-      console.log(path);
       var element = path.shift();
       if(element === '') {
         element = '/'
