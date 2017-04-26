@@ -1,0 +1,49 @@
+# this file is designed to be used together with vim-rest-console plugin:
+# http://www.vim.org/scripts/script.php?script_id=5182
+
+
+# check connection
+http://localhost:9200
+GET /_cat/nodes?v
+
+# get all mappings
+http://localhost:9200
+GET /_mapping
+
+# get indices
+http://localhost:9200
+GET /_cat/indices?v
+
+# get mapping for index "ingress"
+http://localhost:9200
+GET /ingress/_mapping
+
+# get all documents
+http://localhost:9200
+GET /_search
+
+# get some documents
+http://localhost:9200
+GET /_search?
+{
+  "query" : {
+    "bool": {
+      "must": [
+        { "match": { "data": "we" } },
+        { "match": { "data": "have" } },
+        { "match": { "source": "Lorien" } }
+      ]
+    }
+  }
+}
+
+# get one document
+http://localhost:9200
+GET /ingress/document/sOOVMnvqRhuQi0HyjYua2A
+
+# delete !!!EVERYTHING!!! (use with caution)
+http://localhost:9200
+Accept: application/json
+DELETE /*
+
+

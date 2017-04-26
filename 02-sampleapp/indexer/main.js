@@ -3,7 +3,9 @@
 var Promise = require('promise');
 var path = require('path');
 var fs = require('fs');
+var zlib = require('zlib');
 var zmq = require('zmq');
+var elasticsearch = require('elasticsearch');
 
 
 VERSION = '0.1';
@@ -128,7 +130,7 @@ function processNext(rqt, res)
   ;
 
   // TODO: come up with better way of scheduling request for next item to process
-  setImmediate(requestNext());
+  requestNext();
 }
 
 function requestFinish(item_id, success)
@@ -154,9 +156,40 @@ function processFinish(rqt, res)
 }
 
 
+var elastic_client = new elasticsearch.Client({
+  host: config['elasticsearch_address']
+});
+
 function processItem(item)
 {
-  return Promise.resolve(false);
+  return (
+    new Promise(function(fulfill, reject) {
+      zlib.gunzip(
+        new Buffer(item['data'], 'base64'),
+        function(err, res) {
+          if(err) {
+            reject(err);
+          }
+          else {
+            fulfill(res);
+          }
+        }
+      );
+    })
+    .then(function(buf) {
+      return elastic_client.index({
+        index: config['elasticsearch_index'],
+        type: config['elasticsearch_type'],
+        body: {
+          metadata: item['metadata'],
+          data: buf.toString()
+        }
+      });
+    })
+    .catch(function(err) {
+      console.err(err);
+    })
+  );
 }
 
 
