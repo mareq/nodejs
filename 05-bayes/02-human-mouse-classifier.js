@@ -8,7 +8,7 @@ var readline = require("readline");
 
 var learn_semaphore = 2;
 
-var stream_mouse = fs.createReadStream("data/mouse.train.txt");
+var stream_mouse = fs.createReadStream("data/mouse2.train.txt");
 var learning_set_mouse = readline.createInterface({
   input: stream_mouse
 });
@@ -24,7 +24,7 @@ stream_mouse.on(
   }
 );
 
-var stream_human = fs.createReadStream("data/human.train.txt");
+var stream_human = fs.createReadStream("data/human2.train.txt");
 var learning_set_human = readline.createInterface({
   input: stream_human
 });
@@ -53,7 +53,7 @@ function onLearningFinished()
     return;
   }
 
-  var stream_human = fs.createReadStream("data/human.train.txt");
+  var stream_human = fs.createReadStream("data/human2.test.txt");
   var test_set_human = readline.createInterface({
     input: stream_human
   });
@@ -74,7 +74,7 @@ function onLearningFinished()
     }
   );
 
-  var stream_mouse = fs.createReadStream("data/mouse.train.txt");
+  var stream_mouse = fs.createReadStream("data/mouse2.test.txt");
   var test_set_mouse = readline.createInterface({
     input: stream_mouse
   });
@@ -93,6 +93,11 @@ function onLearningFinished()
     function() {
       onTestFinished();
     }
+  );
+  fs.writeFile(
+    "data/classifier2.json",
+    JSON.stringify(JSON.parse(classifier.toJson()), null, 2),
+    function() { }
   );
 }
 
